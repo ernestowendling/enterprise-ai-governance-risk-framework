@@ -1,0 +1,8 @@
+performance: {direction: min, amber: 0.78, red: 0.72}
+data_drift: {direction: max, amber: 0.10, red: 0.25}
+output_drift: {direction: max, amber: 0.10, red: 0.25}
+error_rate: {direction: max, amber: 0.05, red: 0.10}
+exception_rate: {direction: max, amber: 0.08, red: 0.15}
+override_rate: {direction: max, amber: 0.15, red: 0.25}
+fairness_ratio: {direction: min, amber: 0.80, red: 0.70}
+incident_count: {direction: max, amber: 0, red: 2}
