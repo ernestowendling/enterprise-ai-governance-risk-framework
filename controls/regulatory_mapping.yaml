@@ -6,15 +6,18 @@ mappings:
     process: Intake, classification, assessment, validation, approval and monitoring
     controls: [CTRL-001, CTRL-002, CTRL-003, CTRL-007, CTRL-009, CTRL-014, CTRL-016]
     evidence: [Inventory record, classification rationale, validation report, approval record, monitoring report]
+    responsible_function: AI Governance with accountable Business Owner and specialist review
   - framework: NIST AI RMF 1.0
     requirement: Govern, Map, Measure and Manage AI risks throughout the lifecycle.
     policy: AI Risk Management Standard
     process: Risk assessment and continuous risk treatment
     controls: [CTRL-002, CTRL-004, CTRL-006, CTRL-008, CTRL-011, CTRL-014, CTRL-017]
     evidence: [Risk assessment, control test results, monitoring alerts, change records]
+    responsible_function: Business Owner with independent second-line challenge
   - framework: ISO/IEC 42001:2023
     requirement: Establish, implement, maintain and continually improve an AI management system.
     policy: AI Governance Policy
     process: Management-system governance and assurance
     controls: [CTRL-001, CTRL-003, CTRL-012, CTRL-018, CTRL-019, CTRL-022]
     evidence: [Ownership record, documented controls, internal assurance, corrective actions]
+    responsible_function: Senior Management and AI Governance management-system owner

@@ -16,3 +16,20 @@ The first line—Business, Product, Technology and Data Owners—owns purpose, d
 | Independent assurance | I | I | I | C | C | C | C | C | A/R | I |
 
 `R` responsible · `A` accountable · `C` consulted · `I` informed. The model is intentionally pragmatic: one accountable Business Owner remains answerable even where specialist reviews are distributed.
+
+## Decision rights
+
+| Decision | Accountable authority | Challenge / execution |
+|---|---|---|
+| Calculated classification | AI Governance framework owner | Technical or Product Owner supplies attributes |
+| Classification override | Authority configured for the effective tier | A separate authorised governance requester proposes with rationale |
+| Risk assessment | Business Owner | Specialist second-line functions challenge their domains |
+| Independent validation conclusion | Model Risk or appointed independent validator | Development supplies evidence but does not approve its own work |
+| Control implementation acceptance | Named Control Owner | Second line reviews material evidence |
+| Exception approval | Risk Owner at least equivalent to the unmet control | Control Owner remediates; AI Governance tracks expiry |
+| Production approval | Tier-derived committee or accountable owner | Business Owner requests; second line advises and challenges |
+| Revalidation conclusion | Tier-derived approval authority | Model Risk validates; Business Owner owns continued use |
+| Suspension | Business Owner or Risk Owner under defined trigger authority | Operations executes and AI Governance records |
+| Retirement | Business Owner | Technology closes access and evidence; AI Governance updates inventory |
+
+Committee participation does not create diffuse shared accountability. Business ownership, specialist conclusions and independent assurance remain distinct.
