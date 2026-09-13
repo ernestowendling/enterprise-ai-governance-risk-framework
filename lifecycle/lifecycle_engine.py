@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from datetime import datetime, timezone
+from typing import Any
 
 ORDER = ("IDEA", "INTAKE", "CLASSIFIED", "ASSESSMENT", "VALIDATION", "APPROVAL", "DEVELOPMENT", "PRE-PRODUCTION", "PRODUCTION", "MONITORING", "REVALIDATION", "RETIRED")
 
@@ -11,6 +13,52 @@ ORDER = ("IDEA", "INTAKE", "CLASSIFIED", "ASSESSMENT", "VALIDATION", "APPROVAL",
 class GateDecision:
     allowed: bool
     reasons: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ApprovalDecision:
+    decision: str
+    decision_authority: str
+    rationale: tuple[str, ...]
+    outstanding_conditions: tuple[str, ...]
+    evidence: tuple[str, ...]
+    timestamp: str
+
+
+APPROVAL_AUTHORITIES = {"LOW":"Business Owner", "MODERATE":"Business and Risk Owners", "HIGH":"AI Governance Committee", "CRITICAL":"Executive Risk Committee"}
+
+
+def decide_approval(effective_risk_tier: str, assessment: dict[str, Any], validation: Any, controls: dict[str, Any], findings: list[Any], human_oversight_required: bool) -> ApprovalDecision:
+    """Apply explicit decision rights to current governance evidence."""
+    blockers, conditions, evidence = [], [], []
+    if assessment.get("assessment_status") not in {"APPROVED", "APPROVED WITH CONDITIONS"}:
+        blockers.append("Risk assessment is not approved.")
+    if effective_risk_tier in {"HIGH", "CRITICAL"}:
+        if validation.status not in {"VALIDATED", "VALIDATED WITH CONDITIONS"}:
+            blockers.append("Acceptable independent validation is missing.")
+        elif validation.status == "VALIDATED WITH CONDITIONS":
+            if not validation.conditions_accepted:
+                blockers.append("Validation conditions have not been explicitly accepted.")
+            else:
+                conditions.extend(validation.conditions)
+                evidence.append(validation.evidence_reference)
+    failed = [cid for cid, item in controls.items() if item.status in {"NOT STARTED", "FAILED"}]
+    if failed:
+        blockers.append("Mandatory control evidence is incomplete: " + ", ".join(failed))
+    if human_oversight_required and controls.get("CTRL-009") and controls["CTRL-009"].status != "EVIDENCED":
+        blockers.append("Required human oversight is not evidenced.")
+    critical = [f.finding_id for f in findings if f.severity == "CRITICAL" and f.status not in {"CLOSED", "RISK ACCEPTED"}]
+    if critical:
+        blockers.append("Unresolved critical findings: " + ", ".join(critical))
+    evidence.extend(item.evidence_reference for item in controls.values() if item.evidence_reference)
+    if blockers:
+        decision = "BLOCKED"
+    elif conditions or assessment.get("assessment_status") == "APPROVED WITH CONDITIONS":
+        decision = "APPROVED WITH CONDITIONS"
+        conditions.extend(assessment.get("approval_conditions", []))
+    else:
+        decision = "APPROVED"
+    return ApprovalDecision(decision, APPROVAL_AUTHORITIES[effective_risk_tier], tuple(blockers) if blockers else ("Required governance evidence is complete.",), tuple(dict.fromkeys(conditions)), tuple(dict.fromkeys(filter(None, evidence))), datetime.now(timezone.utc).isoformat())
 
 
 def evaluate_transition(current: str, target: str, context: dict) -> GateDecision:
@@ -24,8 +72,12 @@ def evaluate_transition(current: str, target: str, context: dict) -> GateDecisio
         reasons.append("Risk classification is incomplete.")
     if target == "VALIDATION" and not context.get("assessment_approved"):
         reasons.append("Risk assessment is not approved.")
-    if target in {"APPROVAL", "PRODUCTION"} and context.get("risk_tier") in {"HIGH", "CRITICAL"} and context.get("validation_status") != "VALIDATED":
+    if target in {"APPROVAL", "PRODUCTION"} and context.get("risk_tier") in {"HIGH", "CRITICAL"} and context.get("validation_status") not in {"VALIDATED", "VALIDATED WITH CONDITIONS"}:
         reasons.append("Independent validation is mandatory for high/critical AI.")
+    if context.get("validation_status") == "VALIDATED WITH CONDITIONS" and not context.get("validation_conditions_accepted"):
+        reasons.append("Validation conditions require explicit acceptance and tracking.")
+    if context.get("failed_mandatory_controls"):
+        reasons.append("Mandatory controls are not evidenced: " + ", ".join(context["failed_mandatory_controls"]))
     if target in {"APPROVAL", "PRODUCTION"} and context.get("human_oversight_required") and not context.get("human_oversight_control"):
         reasons.append("Mandatory human-oversight control is missing.")
     if target == "PRODUCTION" and not context.get("approval_granted"):
