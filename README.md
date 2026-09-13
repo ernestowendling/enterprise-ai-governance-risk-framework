@@ -4,6 +4,8 @@
 
 Enterprise AI Governance & Risk Framework demonstrates how a regulated financial institution can inventory, classify, assess, approve, monitor, revalidate and retire AI systems through a controlled enterprise lifecycle. It translates AI risk and regulatory expectations into operating practice: named ownership, proportionate classification, assessment, controls, lifecycle gates, independent validation, human oversight, monitoring and auditable evidence.
 
+The framework demonstrates operational governance decisions rather than only policy documentation. Its connected session workspace carries one AI system from intake through classification, governed expert challenge, assessment, control evidence, validation, approval, monitoring, findings and revalidation.
+
 **This is a reference implementation using synthetic data for demonstration purposes and not a production risk-management system.**
 
 ## 1. Executive Summary
@@ -43,13 +45,15 @@ The framework reduces unmanaged AI exposure, avoids duplicative review and direc
 flowchart TB
   U[Business and AI use cases] --> I[AI intake]
   I --> V[Central AI inventory]
-  V --> C[Risk classification]
-  C --> A[Risk assessment]
+  V --> C[Calculated classification]
+  C --> X[Governance challenge and override]
+  X --> A[Structured risk assessment]
   A --> K[Control framework]
   K --> G[Validation and governance approval]
   G --> P[Production AI]
   P --> M[Monitoring · drift · fairness]
-  M --> R[Revalidation · incident · retirement]
+  M --> F[Finding · escalation]
+  F --> R[Revalidation · incident · retirement]
   R --> V
   O[AI Governance · Model Risk · Compliance · Data Governance · Information Security · Operational Risk]
   O -. challenge .-> C
@@ -57,7 +61,7 @@ flowchart TB
   O -. escalation .-> M
 ```
 
-YAML holds classification rules, controls, thresholds, approval requirements and mappings. Python contains deterministic domain logic. CSV contains synthetic evidence. Streamlit is a replaceable demonstration interface, not the governance system itself. See [architecture](docs/architecture.md).
+YAML holds classification rules, assessment questions, controls, thresholds, approval requirements and mappings. Python contains deterministic domain logic and a lightweight in-memory `GovernanceWorkspace`. Streamlit session state connects the demonstration without a database; the interface remains replaceable and is not itself the governance system. See [architecture](docs/architecture.md).
 
 ## 7. AI Governance Target Operating Model
 
@@ -69,9 +73,11 @@ The engine evaluates impact, autonomy, data, regulatory relevance, complexity, v
 
 Scores route work; they do not estimate loss probability and must not create fake mathematical precision. Boundaries and factor weights require institution-specific calibration, challenge and override governance. Rules are visible in [`classification_rules.yaml`](controls/classification_rules.yaml).
 
+The calculated tier is retained as governance evidence. An authorised user may propose an effective tier with rationale. Proposed or rejected overrides do not change treatment; an approved override changes downstream controls and decision authority while preserving the original calculation.
+
 ## 9. AI Risk Assessment
 
-Assessment covers strategic, customer/conduct, model, data, privacy, security, operational, legal/regulatory, third-party, explainability, bias/fairness, human oversight, reputational and GenAI risk. Each applicable domain records inherent risk, control effectiveness, residual risk, findings, remediation, conditions and reviewer judgement. Supported states run from `DRAFT` through `APPROVED WITH CONDITIONS`, `REJECTED` and `REVALIDATION REQUIRED`.
+Assessment covers strategic, customer/conduct, model, data, privacy, security, operational, legal/regulatory, third-party, explainability, bias/fairness, human oversight, reputational and GenAI risk. Twenty-one controlled questions capture evidence expectations and lifecycle implications. Material adverse answers create owned findings, remediation and approval conditions. The questionnaire is a structured decision aid, not a substitute for expert judgement.
 
 ## 10. AI Lifecycle
 
@@ -82,6 +88,8 @@ Transitions follow a controlled sequence. High or critical AI cannot reach appro
 ## 11. Control Framework
 
 The control library contains 22 preventive, detective and corrective controls. Every entry defines its objective, applicability, accountable role, evidence, test method, frequency, risk and illustrative regulatory mapping. Classification derives a tier-specific subset, linking risk to action without treating every AI use as high risk.
+
+Each system records control implementation status, owner, evidence reference, reviewer, date and comments. Missing or failed mandatory evidence can block approval.
 
 ## 12. Model Monitoring & Revalidation
 
@@ -105,12 +113,18 @@ Synthetic group outcomes produce selection rates and a simple ratio-based review
 
 The illustrative mapping shows how selected expectations from the EU AI Act, NIST AI RMF and ISO/IEC 42001 can be translated into policy, process, control and evidence. **The mapping is illustrative and must be adapted to applicable jurisdiction, regulatory interpretation and institutional policy.** It is not legal advice or a claim of compliance.
 
+### Swiss Banking Governance Context
+
+The [Swiss banking context](governance/swiss_banking_context.md) explains how AI governance fits enterprise risk, model governance, operational risk, information security, data governance, third-party risk, Compliance, Legal, internal controls, senior-management accountability and Internal Audit. It distinguishes confirmed external requirements, illustrative mapping and institution-specific implementation; it does not claim Swiss or FINMA compliance.
+
 ## 16. Repository Structure
 
 ```text
 app.py                     Streamlit governance journey
 inventory/                 Validated central inventory and service
 assessments/               Classification and domain assessment logic
+governance_workspace.py    Connected in-memory governance state
+findings.py                Shared assessment and monitoring finding model
 controls/                  Rules, taxonomy, control library and mappings
 lifecycle/                 Approval gates and revalidation triggers
 monitoring/                Performance, drift and fairness interpretation
@@ -148,7 +162,7 @@ Tests cover valid and invalid inventory records, unique IDs, scoring and tier bo
 
 ## 19. Demonstration
 
-Run the app and follow the [five-minute Loan Decision Support walkthrough](docs/demo_walkthrough.md): inventory → classification rationale → assessment → mandatory controls → human oversight → blocked/pass lifecycle gate → RED monitoring breach → fairness review → audit evidence.
+Run the app and follow the [five-minute Loan Decision Support walkthrough](docs/demo_walkthrough.md): inventory → calculated classification → optional override → structured assessment → findings → controls → oversight → blocked/pass approval → validation → RED breach → revalidation → audit evidence. No source-file editing is required.
 
 ## 20. Limitations
 
@@ -158,6 +172,8 @@ Run the app and follow the [five-minute Loan Decision Support walkthrough](docs/
 - Actual governance must reflect applicable law, regulatory interpretation, policy, risk appetite and system context.
 - Model-risk and monitoring thresholds require institutional calibration and independent validation.
 - Fairness cannot be reduced to a single metric.
+- Production approval decisions require an institution-specific authority matrix.
+- Swiss regulatory application requires institution-specific interpretation by competent functions.
 - File-based storage lacks production identity, access control, workflow, immutable retention, integration, resilience and segregation of duties.
 
 ## 21. Future Evolution
