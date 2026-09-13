@@ -1,0 +1,16 @@
+domains:
+  - Strategic Risk
+  - Customer / Conduct Risk
+  - Model Risk
+  - Data Risk
+  - Privacy Risk
+  - Security Risk
+  - Operational Risk
+  - Legal / Regulatory Risk
+  - Third-Party Risk
+  - Explainability Risk
+  - Bias / Fairness Risk
+  - Human Oversight Risk
+  - Reputational Risk
+  - Generative AI Risk
+scale: [LOW, MODERATE, HIGH, CRITICAL]

@@ -1,0 +1,6 @@
+gates:
+  CLASSIFIED: [classification_complete]
+  VALIDATION: [assessment_approved]
+  APPROVAL: [mandatory_controls_evidenced, validation_if_required, human_oversight_if_required]
+  PRODUCTION: [approval_granted, release_controls_complete, monitoring_plan_approved]
+  REVALIDATION: [trigger_recorded, reviewer_assigned]

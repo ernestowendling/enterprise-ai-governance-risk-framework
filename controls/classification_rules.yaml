@@ -1,0 +1,53 @@
+model_version: 1.0
+purpose: Transparent prioritisation for governance; not a statistical prediction of loss.
+limitations: Scores are ordinal decision aids and require institutional calibration and expert judgement.
+factors:
+  - {field: customer_facing, equals: true, points: 2, rationale: Customer-facing use increases conduct and reputational exposure.}
+  - {field: decision_impact, equals: high, points: 4, rationale: The system influences a consequential decision.}
+  - {field: financial_impact, equals: high, points: 3, rationale: Outcomes may have material financial consequences.}
+  - {field: autonomy_level, equals: high, points: 3, rationale: High autonomy reduces opportunities for intervention.}
+  - {field: autonomy_level, equals: medium, points: 2, rationale: Partial autonomy requires explicit oversight.}
+  - {field: personal_data, equals: true, points: 2, rationale: Personal data creates privacy and data-governance obligations.}
+  - {field: sensitive_data, equals: true, points: 3, rationale: Sensitive data increases harm and discrimination exposure.}
+  - {field: regulatory_relevance, equals: high, points: 3, rationale: The use sits within material regulatory obligations.}
+  - {field: model_complexity, equals: high, points: 2, rationale: Complexity increases validation and explainability challenges.}
+  - {field: vendor_or_internal, equals: vendor, points: 1, rationale: External dependency limits transparency and change control.}
+  - {field: explainability_requirement, equals: high, points: 2, rationale: Decisions require intelligible reasons.}
+  - {field: bias_impact, equals: high, points: 3, rationale: Unequal outcomes could materially harm protected groups.}
+  - {field: operational_criticality, equals: high, points: 2, rationale: Failure could disrupt a critical business service.}
+  - {field: cybersecurity_impact, equals: high, points: 2, rationale: Misuse or compromise could create material harm.}
+  - {field: human_oversight, equals: absent, points: 2, rationale: Effective human intervention is not yet evidenced.}
+tiers:
+  - {name: LOW, min_score: 0, max_score: 5}
+  - {name: MODERATE, min_score: 6, max_score: 11}
+  - {name: HIGH, min_score: 12, max_score: 19}
+  - {name: CRITICAL, min_score: 20, max_score: 99}
+tier_requirements:
+  LOW:
+    controls: [CTRL-001, CTRL-002, CTRL-003]
+    review_functions: [AI Governance]
+    approval: Business Owner
+    validation: [Owner testing]
+    monitoring: [Annual control attestation]
+    revalidation_months: 24
+  MODERATE:
+    controls: [CTRL-001, CTRL-002, CTRL-003, CTRL-004, CTRL-006, CTRL-014]
+    review_functions: [AI Governance, Information Security]
+    approval: Business and Risk Owners
+    validation: [Independent challenge proportionate to use]
+    monitoring: [Quarterly performance and control monitoring]
+    revalidation_months: 12
+  HIGH:
+    controls: [CTRL-001, CTRL-002, CTRL-003, CTRL-004, CTRL-005, CTRL-006, CTRL-007, CTRL-008, CTRL-009, CTRL-010, CTRL-011, CTRL-014, CTRL-017, CTRL-019]
+    review_functions: [AI Governance, Model Risk, Compliance, Data Governance, Information Security]
+    approval: AI Governance Committee
+    validation: [Independent validation, Bias and fairness assessment, Explainability review, Security review]
+    monitoring: [Monthly performance and drift, Quarterly fairness review, Incident triggers]
+    revalidation_months: 12
+  CRITICAL:
+    controls: [CTRL-001, CTRL-002, CTRL-003, CTRL-004, CTRL-005, CTRL-006, CTRL-007, CTRL-008, CTRL-009, CTRL-010, CTRL-011, CTRL-012, CTRL-013, CTRL-014, CTRL-015, CTRL-016, CTRL-017, CTRL-018, CTRL-019, CTRL-020, CTRL-021, CTRL-022]
+    review_functions: [AI Governance, Model Risk, Compliance, Legal, Data Governance, Information Security, Operational Risk]
+    approval: Executive Risk Committee
+    validation: [Full independent validation, Bias and fairness assessment, Explainability review, Robustness testing, Human interaction testing, Third-party review]
+    monitoring: [Continuous key-risk indicators, Monthly committee reporting, Event-driven revalidation]
+    revalidation_months: 6

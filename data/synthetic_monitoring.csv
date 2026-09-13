@@ -1,0 +1,6 @@
+date,system_id,performance,data_drift,output_drift,error_rate,exception_rate,override_rate,human_review_rate,fairness_ratio,incident_count,status
+2026-04-30,AI-001,0.84,0.04,0.03,0.025,0.041,0.10,1.00,0.91,0,GREEN
+2026-05-31,AI-001,0.83,0.06,0.05,0.030,0.045,0.11,1.00,0.89,0,GREEN
+2026-06-30,AI-001,0.81,0.09,0.08,0.039,0.053,0.13,1.00,0.86,0,GREEN
+2026-07-31,AI-001,0.79,0.13,0.11,0.051,0.071,0.17,1.00,0.81,0,AMBER
+2026-08-31,AI-001,0.70,0.29,0.27,0.112,0.162,0.28,1.00,0.68,2,RED

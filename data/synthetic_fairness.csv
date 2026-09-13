@@ -1,0 +1,11 @@
+record_id,system_id,group,approved
+F001,AI-001,Group A,1
+F002,AI-001,Group A,1
+F003,AI-001,Group A,1
+F004,AI-001,Group A,1
+F005,AI-001,Group A,0
+F006,AI-001,Group B,1
+F007,AI-001,Group B,1
+F008,AI-001,Group B,0
+F009,AI-001,Group B,0
+F010,AI-001,Group B,0
