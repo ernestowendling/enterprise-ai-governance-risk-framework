@@ -6,6 +6,14 @@ Enterprise AI Governance & Risk Framework demonstrates how a regulated financial
 
 **This is a reference implementation using synthetic data for demonstration purposes and not a production risk-management system.**
 
+## Start here
+
+The repository includes a synthetic AI inventory, configurable classification rules, Python lifecycle-gate checks, monitoring examples, governance templates and automated tests.
+
+Follow the [five-minute walkthrough](docs/demo_walkthrough.md), inspect the [architecture](docs/architecture.md), or explore the [governance documents](governance/). These demonstrate control logic; production identity, durable workflows and enforced evidence retention remain future work.
+
+The complementary [Data Governance Operating Model](https://github.com/ernestowendling/enterprise-data-governance-operating-model) covers data ownership, business definitions and governance registers.
+
 ## 1. Executive Summary
 
 Financial institutions need to know where AI is used, who is accountable, which risks matter, what evidence is sufficient and who may accept residual risk. This repository answers those questions with an executable control model rather than a policy-only catalogue. Nine synthetic banking scenarios demonstrate proportionality: an internal coding assistant receives lighter treatment than loan decision support, fraud detection or candidate screening.
